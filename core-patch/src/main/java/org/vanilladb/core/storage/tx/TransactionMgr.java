@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.vanilladb.core.featurecollect.*;
 import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.core.storage.buffer.BufferMgr;
 import org.vanilladb.core.storage.log.LogSeqNum;

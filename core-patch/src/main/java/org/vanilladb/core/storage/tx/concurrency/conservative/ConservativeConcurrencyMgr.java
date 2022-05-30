@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.vanilladb.core.featurecollect.*;
 import org.vanilladb.core.sql.PrimaryKey;
 import org.vanilladb.core.storage.file.BlockId;
 import org.vanilladb.core.storage.record.RecordId;

@@ -119,7 +119,7 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements
 		tx.commit();
 		this.isolationLevel = level;
 		try {
-			tx = VanillaDb.txMgr().newTransaction(isolationLevel, readOnly);
+			tx = VanillaDb.().newTransaction(isolationLevel, readOnly);
 		} catch (Exception e) {
 			throw new RemoteException("error creating transaction ", e);
 		}
