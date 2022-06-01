@@ -1,4 +1,4 @@
-txNum,startTime,readCount,writeCount,queryType,concurrentlyExecutingTxNum
+Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum
 0,770234,0,0,0,0
 1,770460,0,0,2,0
 2,770521,27,27,3,4
