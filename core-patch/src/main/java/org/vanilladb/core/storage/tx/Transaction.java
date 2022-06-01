@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.core.storage.buffer.BufferMgr;
@@ -40,7 +41,6 @@ public class Transaction {
 	private long txNum;
 	private boolean readOnly;
 	private long startTime;
-	private long latency;
 	private int activeTxCount;
 	private TransactionMgr txMgr;
 
@@ -117,13 +117,13 @@ public class Transaction {
 			logger.fine("transaction " + txNum + " committed");
 		
 		// TODO: record latency and start time in LatencyGroundTruth.csv
-		this.latency = System.nanoTime() - this.startTime;
-		System.out.print("latency of tx " + this.getTransactionNumber() + " = " + this.latency);
 
 		// DONE: Record activeTxnCount in FeatureMap
 		this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
 		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
 		VanillaDb.featureMap().setTxNum((int)txNum);
+		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)txNum);
+		VanillaDb.featureMap().setLatency(System.nanoTime() - startTime, (int)txNum);
 	}
 
 	/**

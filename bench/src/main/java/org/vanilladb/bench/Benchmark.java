@@ -32,7 +32,7 @@ public abstract class Benchmark {
 	}
 
 	public void startRecordFeature(SutConnection conn) throws SQLException {
-		conn.callStoredProc(ControlTransactionType.STOP_PROFILING.getProcedureId());
+		conn.callStoredProc(ControlTransactionType.START_RECORD_FEATURE.getProcedureId());
 		System.out.println("RecordFeature is finished.");
 	}
 	

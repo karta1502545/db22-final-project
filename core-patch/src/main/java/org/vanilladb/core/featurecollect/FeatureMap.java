@@ -3,12 +3,12 @@ package org.vanilladb.core.featurecollect;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FeatureMap {
-	private static HashMap<Integer, FeatureCollection> featureMap;
+	private static ConcurrentHashMap<Integer, FeatureCollection> featureMap;
     public FeatureMap() {
-        featureMap = new HashMap<Integer, FeatureCollection>();
+        featureMap = new ConcurrentHashMap<Integer, FeatureCollection>();
         System.out.println("Hello from initFeatureMap");
 
         // FeatureCollection temp1 = new FeatureCollection();
@@ -20,10 +20,19 @@ public class FeatureMap {
         // for(FeatureCollection element : featureMap.values())
         //     System.out.println("txNum = " + element.txNum);
     }
-    public HashMap<Integer, FeatureCollection> getFeatureMap() {
+    public ConcurrentHashMap<Integer, FeatureCollection> getFeatureMap() {
 		return featureMap;
 	}
-    
+    public void setLatency(long latency, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.latency = latency;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
+    public void setStartTime(long startTime, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.startTime = startTime;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
     public void setTxNum(int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.txNum = txNum;
@@ -31,7 +40,7 @@ public class FeatureMap {
     }
     public void setActiveTxCount(int activeTxCount, long txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
-        temp.txnType = activeTxCount;
+        temp.concurrentlyExecutingTxNum = activeTxCount;
         featureMap.put((Integer)(int)txNum, temp);
     }
     public void setTxnType(int txnType, long txNum) {
@@ -59,20 +68,18 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff = new StringBuilder();
-        buff.append("txNum,startTime,readCount,writeCount,queryType,concurrentlyExecutingTxNum,accessedTableNum").append(LINE_SEPARATOR);
+        buff.append("txNum,latency,startTime,readCount,writeCount,queryType,concurrentlyExecutingTxNum").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
-        // for (FeatureCollection txFeature : featureMap.values()) {
-        //     buff.append(txFeature.txNum).append(",")
-        //         .append(txFeature.startTime).append(",")
-        //         .append(txFeature.readCount).append(",")
-        //         .append(txFeature.writeCount).append(",")
-        //         .append(txFeature.txnType).append(",")
-        //         .append(txFeature.concurrentlyExecutingTxNum).append(",")
-        //         .append(txFeature.accessedTableNum).append(",")
-        //         .append(LINE_SEPARATOR);
-        //     System.out.println(txFeature.txNum);
-        //     continue;
-        // }
+        for (FeatureCollection txFeature : featureMap.values()) {
+            buff.append(txFeature.txNum).append(",")
+                .append(txFeature.latency).append(",")
+                .append(txFeature.startTime).append(",")
+                .append(txFeature.readCount).append(",")
+                .append(txFeature.writeCount).append(",")
+                .append(txFeature.txnType).append(",")
+                .append(txFeature.concurrentlyExecutingTxNum).append(",")
+                .append(LINE_SEPARATOR);
+        }
         pw.write(buff.toString());
         pw.close();
         System.out.println("Features of each transaction are successfully written in Feature.csv!");

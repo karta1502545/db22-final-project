@@ -1,15 +1,10 @@
 package org.vanilladb.core.storage.tx.concurrency.conservative;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.vanilladb.core.featurecollect.*;
-import org.vanilladb.core.sql.storedprocedure.StoredProcedure.*;
-import org.vanilladb.core.featurecollect.FeatureCollection;
-import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.core.sql.PrimaryKey;
 import org.vanilladb.core.storage.file.BlockId;
 import org.vanilladb.core.storage.record.RecordId;
@@ -25,8 +20,6 @@ public class ConservativeConcurrencyMgr extends ConcurrencyMgr {
 	// For Indexes - using crabbing locking
 	private Set<BlockId> readIndexBlks = new HashSet<BlockId>();
 	private Set<BlockId> writtenIndexBlks = new HashSet<BlockId>();
-	private HashMap<Integer, Integer> txReadCount = new HashMap<Integer, Integer>();
-	private HashMap<Integer, Integer> txWriteCount = new HashMap<Integer, Integer>();
 
 	public ConservativeConcurrencyMgr(long txNumber) {
 		txNum = txNumber;
@@ -107,14 +100,11 @@ public class ConservativeConcurrencyMgr extends ConcurrencyMgr {
 		
 		for (Object obj : writeObjs) {
 			lockTbl.xLock(obj, txNum);
-			txReadCount.put((Integer)(int)txNum, txReadCount.getOrDefault((Integer)(int)txNum, 0) + 1);
-			
 		}
 		
 		for (Object obj : readObjs) {
 			if (!writeObjs.contains(obj)) {
 				lockTbl.sLock(obj, txNum);
-				txWriteCount.put((Integer)(int)(txNum), txWriteCount.getOrDefault((Integer)(int)txNum, 0) + 1);
 			}
 		}
 	}
@@ -123,11 +113,6 @@ public class ConservativeConcurrencyMgr extends ConcurrencyMgr {
 	public void onTxCommit(Transaction tx) {
 		releaseIndexLocks();
 		releaseLocks();
-		// DONE:record readCount and writeCount into FeatureMap
-		System.out.println(txReadCount.getOrDefault((Integer)(int)txNum, 0));
-		System.out.println(txNum);
-		VanillaDb.featureMap().setReadCount((int)txNum, txReadCount.getOrDefault((Integer)(int)txNum, 0));
-		VanillaDb.featureMap().setWriteCount((int)txNum, txWriteCount.getOrDefault((Integer)(int)txNum, 0));
 	}
 	
 	@Override

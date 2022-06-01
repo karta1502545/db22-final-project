@@ -2,10 +2,10 @@ package org.vanilladb.core.featurecollect;
 
 public class FeatureCollection{
 	int txNum;
-	int startTime;
+	long latency;
+	long startTime;
 	int readCount;
 	int writeCount;
 	int txnType;
 	int concurrentlyExecutingTxNum;
-	int accessedTableNum;
 }

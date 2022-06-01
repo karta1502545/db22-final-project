@@ -83,6 +83,8 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 		// create a transaction
 		boolean isReadOnly = paramHelper.isReadOnly();
 		tx = scheduleTransactionSerially(isReadOnly, readSet, writeSet);
+		VanillaDb.featureMap().setReadCount(readSet.size(), tx.getTransactionNumber());
+		VanillaDb.featureMap().setWriteCount(writeSet.size(), tx.getTransactionNumber());
 		VanillaDb.featureMap().setTxnType(pid, tx.getTransactionNumber());
 	}
 	
