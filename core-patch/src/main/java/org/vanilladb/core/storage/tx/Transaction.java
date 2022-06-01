@@ -39,6 +39,11 @@ public class Transaction {
 	private List<TransactionLifecycleListener> lifecycleListeners;
 	private long txNum;
 	private boolean readOnly;
+	private long startTime;
+	private long latency;
+	private int activeTxCount;
+	private TransactionMgr txMgr;
+
 
 	/**
 	 * Creates a new transaction and associates it with a recovery manager, a
@@ -68,6 +73,10 @@ public class Transaction {
 		this.bufferMgr = (BufferMgr) bufferMgr;
 		this.txNum = txNum;
 		this.readOnly = readOnly;
+		this.startTime = System.nanoTime();
+		this.activeTxCount = txMgr.getActiveTxCount();
+		this.txMgr = txMgr;
+		
 
 		lifecycleListeners = new LinkedList<TransactionLifecycleListener>();
 		// XXX: A transaction manager must be added before a recovery manager to
@@ -106,6 +115,15 @@ public class Transaction {
 
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("transaction " + txNum + " committed");
+		
+		// TODO: record latency and start time in LatencyGroundTruth.csv
+		this.latency = System.nanoTime() - this.startTime;
+		System.out.print("latency of tx " + this.getTransactionNumber() + " = " + this.latency);
+
+		// DONE: Record activeTxnCount in FeatureMap
+		this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
+		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
+		VanillaDb.featureMap().setTxNum((int)txNum);
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.bench.benchmarks.micro.MicroBenchmark;
 import org.vanilladb.bench.benchmarks.tpcc.TpccBenchmark;
 import org.vanilladb.bench.remote.SutConnection;
@@ -127,6 +128,7 @@ public class VanillaBench {
 
 			// Create a report
 			statMgr.outputReport();
+			benchmarker.startRecordFeature(getConnection());
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();

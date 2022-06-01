@@ -43,7 +43,7 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements
 			throws RemoteException {
 		try {
 			StoredProcedure<?> sp = VanillaDb.spFactory().getStoredProcedure(pid);
-			sp.prepare(pars);
+			sp.prepare(pid, pars);
 			return sp.execute();
 		} catch (Exception e) {
 			e.printStackTrace();

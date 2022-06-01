@@ -45,7 +45,6 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 		try {
 			Transaction tx = VanillaDb.txMgr().newTransaction(
 					Connection.TRANSACTION_SERIALIZABLE, isReadOnly);
-			
 			ConservativeConcurrencyMgr ccMgr = (ConservativeConcurrencyMgr) tx.concurrencyMgr();
 			
 			// Reserve lock so that deterministic ordering is ensured
@@ -74,7 +73,7 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 	// Child classes of stored procedure should provide prepareKeys implementation
 	protected abstract void prepareKeys();
 	
-	public void prepare(Object... pars) {
+	public void prepare(int pid, Object... pars) {
 		// prepare parameters
 		paramHelper.prepareParameters(pars);
 		
@@ -84,7 +83,7 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 		// create a transaction
 		boolean isReadOnly = paramHelper.isReadOnly();
 		tx = scheduleTransactionSerially(isReadOnly, readSet, writeSet);
-		
+		VanillaDb.featureMap().setTxnType(pid, tx.getTransactionNumber());
 	}
 	
 	public SpResultSet execute() {

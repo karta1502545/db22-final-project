@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.vanilladb.core.featurecollect.*;
 import org.vanilladb.core.query.planner.Planner;
 import org.vanilladb.core.query.planner.QueryPlanner;
 import org.vanilladb.core.query.planner.UpdatePlanner;
@@ -69,6 +70,7 @@ public class VanillaDb {
 	private static StatMgr statMgr;
 	private static TaskMgr taskMgr;
 	private static TransactionMgr txMgr;
+	private static FeatureMap featureMap;
 
 	// Utility classes
 	private static StoredProcedureFactory spFactory;
@@ -125,6 +127,8 @@ public class VanillaDb {
 		initFileAndLogMgr(dirName);
 		initTaskMgr();
 		initTxMgr();
+		initFeatureMap();
+		
 
 		// the first transaction for initializing the system
 		Transaction initTx = txMgr.newTransaction(
@@ -181,6 +185,10 @@ public class VanillaDb {
 	 * lower-level components of the system without having to initialize
 	 * everything.
 	 */
+
+	public static void initFeatureMap() {
+		featureMap = new FeatureMap();
+	}
 
 	/**
 	 * Initializes only the file manager.
@@ -254,6 +262,10 @@ public class VanillaDb {
 
 	public static LogMgr logMgr() {
 		return logMgr;
+	}
+
+	public static FeatureMap featureMap() {
+		return featureMap;
 	}
 
 	public static CatalogMgr catalogMgr() {
@@ -338,4 +350,13 @@ public class VanillaDb {
 			e.printStackTrace();
 		}
 	}
+
+	public static void startRecordFeature() {
+		try {
+			VanillaDb.featureMap().outputFeatureMapAsCSV();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
+

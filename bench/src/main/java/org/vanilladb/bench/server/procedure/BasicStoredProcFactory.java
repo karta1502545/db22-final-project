@@ -21,6 +21,8 @@ public class BasicStoredProcFactory implements StoredProcedureFactory {
 				return new StartProfilingProc();
 			case STOP_PROFILING:
 				return new StopProfilingProc();
+			case START_RECORD_FEATURE:
+				return new StartRecordFeature();
 			}
 		}
 		

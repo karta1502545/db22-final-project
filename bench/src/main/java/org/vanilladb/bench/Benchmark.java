@@ -30,6 +30,11 @@ public abstract class Benchmark {
 	public void stopProfilingProcedure(SutConnection conn) throws SQLException {
 		conn.callStoredProc(ControlTransactionType.STOP_PROFILING.getProcedureId());
 	}
+
+	public void startRecordFeature(SutConnection conn) throws SQLException {
+		conn.callStoredProc(ControlTransactionType.STOP_PROFILING.getProcedureId());
+		System.out.println("RecordFeature is finished.");
+	}
 	
 	public int getNumOfRTEs() {
 		return VanillaBenchParameters.NUM_RTES;

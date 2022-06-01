@@ -5,7 +5,7 @@ public class FeatureCollection{
 	int startTime;
 	int readCount;
 	int writeCount;
-	String queryType;
+	int txnType;
 	int concurrentlyExecutingTxNum;
 	int accessedTableNum;
 }

@@ -2,7 +2,7 @@ package org.vanilladb.bench;
 
 public enum ControlTransactionType {
 
-	START_PROFILING(1001), STOP_PROFILING(1002);
+	START_PROFILING(1001), STOP_PROFILING(1002), START_RECORD_FEATURE(1003);
 	
 	private int pid;
 	
@@ -16,7 +16,10 @@ public enum ControlTransactionType {
 			return START_PROFILING;
 		case 1002:
 			return STOP_PROFILING;
+		case 1003:
+			return START_RECORD_FEATURE;
 		}
+
 		return null;
 	}
 	
