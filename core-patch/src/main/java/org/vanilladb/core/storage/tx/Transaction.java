@@ -123,7 +123,7 @@ public class Transaction {
 		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
 		VanillaDb.featureMap().setTxNum((int)txNum);
 		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)txNum);
-		VanillaDb.featureMap().setLatency(System.nanoTime() - startTime, (int)txNum);
+		VanillaDb.featureMap().setLatency(TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startTime), (int)txNum);
 	}
 
 	/**
