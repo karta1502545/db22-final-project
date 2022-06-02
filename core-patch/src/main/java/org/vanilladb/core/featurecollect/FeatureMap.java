@@ -26,7 +26,8 @@ public class FeatureMap {
     public void setCpuUsage(double cpuUsage, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.cpuUsage = cpuUsage;
-    
+    }
+
     public void setNumberOfQueuingTx(int numberOfQueuingTx, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.numberOfQueuingTx = numberOfQueuingTx;
@@ -93,7 +94,7 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff = new StringBuilder();
-        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
+        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
             buff.append(txFeature.txNum).append(", ")
@@ -104,6 +105,7 @@ public class FeatureMap {
                 .append(txFeature.concurrentlyExecutingTxNum).append(", ")
                 .append(txFeature.readRecordSize).append(", ")
                 .append(txFeature.writeRecordSize).append(", ")
+                .append(txFeature.numberOfQueuingTx).append(", ")
                 .append(txFeature.memoryUsage).append(", ")
                 .append(txFeature.cpuUsage)
                 .append(LINE_SEPARATOR);
@@ -135,7 +137,7 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff2 = new StringBuilder();
-        buff2.append("Transaction ID, Latency, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
+        buff2.append("Transaction ID, Latency, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
             buff2.append(txFeature.txNum).append(", ")
@@ -147,11 +149,12 @@ public class FeatureMap {
                 .append(txFeature.concurrentlyExecutingTxNum).append(", ")
                 .append(txFeature.readRecordSize).append(", ")
                 .append(txFeature.writeRecordSize).append(", ")
+                .append(txFeature.numberOfQueuingTx).append(", ")
                 .append(txFeature.memoryUsage).append(", ")
                 .append(txFeature.cpuUsage)
                 .append(LINE_SEPARATOR);
         }       
-        pw.write(buff.toString());
+        pw.write(buff2.toString());
         pw.close();
 
         System.out.println("Features of each transaction are successfully written in csv!");
