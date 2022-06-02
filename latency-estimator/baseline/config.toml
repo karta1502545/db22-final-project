@@ -1,0 +1,5 @@
+
+[general]
+
+# The end time of warm-up transactions in microseconds
+warm_up_end_time = 307730

@@ -85,6 +85,19 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 		tx = scheduleTransactionSerially(isReadOnly, readSet, writeSet);
 		VanillaDb.featureMap().setReadCount(readSet.size(), tx.getTransactionNumber());
 		VanillaDb.featureMap().setWriteCount(writeSet.size(), tx.getTransactionNumber());
+
+		int readTotalRecordSize = 0;
+		for(PrimaryKey subReadSet : readSet) {
+			readTotalRecordSize += subReadSet.getKeyEntryMapSize();
+		}
+		VanillaDb.featureMap().setReadRecordSize(readTotalRecordSize, (int)tx.getTransactionNumber());
+
+		int writeTotalRecordSize = 0;
+		for(PrimaryKey subWriteSet : writeSet) {
+			writeTotalRecordSize += subWriteSet.getKeyEntryMapSize();
+		}
+		VanillaDb.featureMap().setWriteRecordSize(writeTotalRecordSize, (int)tx.getTransactionNumber());
+
 		VanillaDb.featureMap().setTxnType(pid, tx.getTransactionNumber());
 	}
 	

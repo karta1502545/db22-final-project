@@ -18,6 +18,10 @@ public class PrimaryKey {
 	public String getTableName() {
 		return tableName;
 	}
+
+	public int getKeyEntryMapSize() {
+		return this.keyEntryMap.size();
+	}
 	
 	public Constant getKeyVal(String fld) {
 		return keyEntryMap.get(fld);

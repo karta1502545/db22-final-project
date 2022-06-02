@@ -1,3 +1,3 @@
-DB_DIR="/Users/karta1502545/BenchDB"
+DB_DIR="C:\Users\Eric\benchDB"
 rm -r $DB_DIR
 cp -r $DB_DIR-backup $DB_DIR

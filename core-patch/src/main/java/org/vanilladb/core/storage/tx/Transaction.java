@@ -15,6 +15,8 @@
  *******************************************************************************/
 package org.vanilladb.core.storage.tx;
 
+import java.util.*;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,6 +27,7 @@ import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.core.storage.buffer.BufferMgr;
 import org.vanilladb.core.storage.tx.concurrency.ConcurrencyMgr;
 import org.vanilladb.core.storage.tx.recovery.RecoveryMgr;
+
 
 /**
  * Provides transaction management for clients, ensuring that all transactions
@@ -76,7 +79,10 @@ public class Transaction {
 		this.startTime = System.nanoTime();
 		this.activeTxCount = txMgr.getActiveTxCount();
 		this.txMgr = txMgr;
-		
+
+		Runtime rt= Runtime.getRuntime();
+		float memoryUsage = (float)(rt.totalMemory() - rt.freeMemory()) / (float)rt.totalMemory();
+		VanillaDb.featureMap().setMemoryUsage(memoryUsage, (int)txNum);
 
 		lifecycleListeners = new LinkedList<TransactionLifecycleListener>();
 		// XXX: A transaction manager must be added before a recovery manager to

@@ -8,4 +8,7 @@ public class FeatureCollection{
 	int writeCount;
 	int txnType;
 	int concurrentlyExecutingTxNum;
+	float memoryUsage;
+	int readRecordSize;
+	int writeRecordSize;
 }

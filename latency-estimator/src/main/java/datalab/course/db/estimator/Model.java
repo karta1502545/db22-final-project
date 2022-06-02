@@ -14,7 +14,7 @@ public class Model {
 	
 	public static Model fit(DataFrame trainingSet) {
 		RandomForest forest = RandomForest.fit(Formula.lhs(Constants.FIELD_NAME_LATENCY),
-				trainingSet, 200, trainingSet.ncols() / 3, 2, 100, 5, 1.0);
+				trainingSet, 200, trainingSet.ncols() / 3,30 , 100, 5, 1.0);
 		return new Model(forest);
 	}
 	

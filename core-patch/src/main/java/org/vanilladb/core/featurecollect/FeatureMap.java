@@ -23,6 +23,21 @@ public class FeatureMap {
     public ConcurrentHashMap<Integer, FeatureCollection> getFeatureMap() {
 		return featureMap;
 	}
+    public void setReadRecordSize(int readRecordSize, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.readRecordSize = readRecordSize;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
+    public void setWriteRecordSize(int writeRecordSize, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.writeRecordSize = writeRecordSize;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
+    public void setMemoryUsage(float memoryUsage, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.memoryUsage = memoryUsage;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
     public void setLatency(long latency, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.latency = latency;
@@ -62,26 +77,49 @@ public class FeatureMap {
         String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
 
         PrintWriter pw = null;
+        //output feature.csv
         try {
-            pw = new PrintWriter(new File("Features.csv"));
+            pw = new PrintWriter(new File("feature.csv"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         StringBuilder buff = new StringBuilder();
-        buff.append("txNum,latency,startTime,readCount,writeCount,queryType,concurrentlyExecutingTxNum").append(LINE_SEPARATOR);
+        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
-            buff.append(txFeature.txNum).append(",")
-                .append(txFeature.latency).append(",")
-                .append(txFeature.startTime).append(",")
-                .append(txFeature.readCount).append(",")
-                .append(txFeature.writeCount).append(",")
-                .append(txFeature.txnType).append(",")
-                .append(txFeature.concurrentlyExecutingTxNum).append(",")
+            buff.append(txFeature.txNum).append(", ")
+                .append(txFeature.startTime).append(", ")
+                .append(txFeature.readCount).append(", ")
+                .append(txFeature.writeCount).append(", ")
+                .append(txFeature.txnType).append(", ")
+                .append(txFeature.concurrentlyExecutingTxNum).append(", ")
+                .append(txFeature.readRecordSize).append(", ")
+                .append(txFeature.writeRecordSize).append(", ")
+                .append(txFeature.memoryUsage)
                 .append(LINE_SEPARATOR);
         }
+
+        
         pw.write(buff.toString());
         pw.close();
-        System.out.println("Features of each transaction are successfully written in Feature.csv!");
+
+        //output latency.csv
+        try {
+            pw = new PrintWriter(new File("latency.csv"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        StringBuilder buff1 = new StringBuilder();
+        buff1.append("Transaction ID, Latency").append(LINE_SEPARATOR);
+        // System.out.println(featureMap.values());
+        for (FeatureCollection txFeature : featureMap.values()) {
+            buff1.append(txFeature.txNum).append(", ")
+                .append(txFeature.latency)
+                .append(LINE_SEPARATOR);
+        }
+        pw.write(buff1.toString());
+        pw.close();
+
+        System.out.println("Features of each transaction are successfully written in csv!");
     }
 }
