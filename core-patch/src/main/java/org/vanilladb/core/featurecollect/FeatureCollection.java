@@ -11,4 +11,5 @@ public class FeatureCollection{
 	float memoryUsage;
 	int readRecordSize;
 	int writeRecordSize;
+	double cpuUsage;
 }

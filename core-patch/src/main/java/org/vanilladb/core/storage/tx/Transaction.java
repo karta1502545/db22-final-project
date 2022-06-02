@@ -17,11 +17,14 @@ package org.vanilladb.core.storage.tx;
 
 import java.util.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import com.sun.management.OperatingSystemMXBean;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.TimeUnit;
+
 
 import org.vanilladb.core.server.VanillaDb;
 import org.vanilladb.core.storage.buffer.BufferMgr;
@@ -83,6 +86,10 @@ public class Transaction {
 		Runtime rt= Runtime.getRuntime();
 		float memoryUsage = (float)(rt.totalMemory() - rt.freeMemory()) / (float)rt.totalMemory();
 		VanillaDb.featureMap().setMemoryUsage(memoryUsage, (int)txNum);
+
+		OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+		double cpuUsage = osBean.getSystemCpuLoad();
+		VanillaDb.featureMap().setCpuUsage(cpuUsage, (int)txNum);
 
 		lifecycleListeners = new LinkedList<TransactionLifecycleListener>();
 		// XXX: A transaction manager must be added before a recovery manager to

@@ -23,6 +23,11 @@ public class FeatureMap {
     public ConcurrentHashMap<Integer, FeatureCollection> getFeatureMap() {
 		return featureMap;
 	}
+    public void setCpuUsage(double cpuUsage, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.cpuUsage = cpuUsage;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
     public void setReadRecordSize(int readRecordSize, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.readRecordSize = readRecordSize;
@@ -84,7 +89,7 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff = new StringBuilder();
-        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage").append(LINE_SEPARATOR);
+        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
             buff.append(txFeature.txNum).append(", ")
@@ -95,11 +100,10 @@ public class FeatureMap {
                 .append(txFeature.concurrentlyExecutingTxNum).append(", ")
                 .append(txFeature.readRecordSize).append(", ")
                 .append(txFeature.writeRecordSize).append(", ")
-                .append(txFeature.memoryUsage)
+                .append(txFeature.memoryUsage).append(", ")
+                .append(txFeature.cpuUsage)
                 .append(LINE_SEPARATOR);
         }
-
-        
         pw.write(buff.toString());
         pw.close();
 
@@ -118,6 +122,32 @@ public class FeatureMap {
                 .append(LINE_SEPARATOR);
         }
         pw.write(buff1.toString());
+        pw.close();
+
+        //output total.csv
+        try {
+            pw = new PrintWriter(new File("total.csv"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        StringBuilder buff2 = new StringBuilder();
+        buff2.append("Transaction ID, Latency, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
+        // System.out.println(featureMap.values());
+        for (FeatureCollection txFeature : featureMap.values()) {
+            buff2.append(txFeature.txNum).append(", ")
+                .append(txFeature.latency).append(", ")
+                .append(txFeature.startTime).append(", ")
+                .append(txFeature.readCount).append(", ")
+                .append(txFeature.writeCount).append(", ")
+                .append(txFeature.txnType).append(", ")
+                .append(txFeature.concurrentlyExecutingTxNum).append(", ")
+                .append(txFeature.readRecordSize).append(", ")
+                .append(txFeature.writeRecordSize).append(", ")
+                .append(txFeature.memoryUsage).append(", ")
+                .append(txFeature.cpuUsage)
+                .append(LINE_SEPARATOR);
+        }       
+        pw.write(buff.toString());
         pw.close();
 
         System.out.println("Features of each transaction are successfully written in csv!");
