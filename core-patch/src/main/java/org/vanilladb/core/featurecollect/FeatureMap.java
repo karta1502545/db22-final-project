@@ -26,6 +26,10 @@ public class FeatureMap {
     public void setCpuUsage(double cpuUsage, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.cpuUsage = cpuUsage;
+    
+    public void setNumberOfQueuingTx(int numberOfQueuingTx, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.numberOfQueuingTx = numberOfQueuingTx;
         featureMap.put((Integer)(int)txNum, temp);
     }
     public void setReadRecordSize(int readRecordSize, int txNum) {

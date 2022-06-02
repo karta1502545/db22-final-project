@@ -12,4 +12,5 @@ public class FeatureCollection{
 	int readRecordSize;
 	int writeRecordSize;
 	double cpuUsage;
+	int numberOfQueuingTx;
 }
