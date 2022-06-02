@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 import org.vanilladb.core.query.planner.BadSemanticException;
 import org.vanilladb.core.remote.storedprocedure.SpResultSet;
@@ -76,7 +77,7 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 	// Child classes of stored procedure should provide prepareKeys implementation
 	protected abstract void prepareKeys();
 	
-	public void prepare(int pid, Object... pars) {
+	public void prepare(int pid, long startTime, Object... pars) {
 		// prepare parameters
 		paramHelper.prepareParameters(pars);
 		
@@ -100,7 +101,7 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 			writeTotalRecordSize += subWriteSet.getKeyEntryMapSize();
 		}
 		VanillaDb.featureMap().setWriteRecordSize(writeTotalRecordSize, (int)tx.getTransactionNumber());
-
+		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)tx.getTransactionNumber());
 		VanillaDb.featureMap().setTxnType(pid, tx.getTransactionNumber());
 	}
 	

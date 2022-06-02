@@ -79,7 +79,6 @@ public class Transaction {
 		this.bufferMgr = (BufferMgr) bufferMgr;
 		this.txNum = txNum;
 		this.readOnly = readOnly;
-		this.startTime = System.nanoTime();
 		this.activeTxCount = txMgr.getActiveTxCount();
 		this.txMgr = txMgr;
 
@@ -135,7 +134,6 @@ public class Transaction {
 		this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
 		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
 		VanillaDb.featureMap().setTxNum((int)txNum);
-		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)txNum);
 		VanillaDb.featureMap().setLatency(TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startTime), (int)txNum);
 	}
 

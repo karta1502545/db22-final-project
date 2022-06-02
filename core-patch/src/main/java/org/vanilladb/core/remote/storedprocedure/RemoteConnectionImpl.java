@@ -42,8 +42,9 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements
 	public SpResultSet callStoredProc(int pid, Object... pars)
 			throws RemoteException {
 		try {
+			long startTime = System.nanoTime();
 			StoredProcedure<?> sp = VanillaDb.spFactory().getStoredProcedure(pid);
-			sp.prepare(pid, pars);
+			sp.prepare(pid, startTime, pars);
 			return sp.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
