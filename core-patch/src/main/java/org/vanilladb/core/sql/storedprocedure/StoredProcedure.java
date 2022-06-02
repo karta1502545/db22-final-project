@@ -50,6 +50,9 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 			// Reserve lock so that deterministic ordering is ensured
 			ccMgr.bookReadKeys(readSet);
 			ccMgr.bookWriteKeys(writeSet);
+
+			int numberOfQueuingTx = SERIAL_CONTROL_LOCK.getQueueLength();
+			VanillaDb.featureMap().setNumberOfQueuingTx(numberOfQueuingTx, (int)tx.getTransactionNumber());
 			
 			return tx;
 		} finally {

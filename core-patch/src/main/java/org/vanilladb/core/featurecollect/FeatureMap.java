@@ -23,6 +23,12 @@ public class FeatureMap {
     public ConcurrentHashMap<Integer, FeatureCollection> getFeatureMap() {
 		return featureMap;
 	}
+    
+    public void setNumberOfQueuingTx(int numberOfQueuingTx, int txNum) {
+        FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
+        temp.numberOfQueuingTx = numberOfQueuingTx;
+        featureMap.put((Integer)(int)txNum, temp);
+    }
     public void setReadRecordSize(int readRecordSize, int txNum) {
         FeatureCollection temp = featureMap.getOrDefault((Integer)(int)txNum, new FeatureCollection());
         temp.readRecordSize = readRecordSize;
