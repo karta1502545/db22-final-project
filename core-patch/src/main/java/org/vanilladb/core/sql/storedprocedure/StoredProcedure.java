@@ -101,7 +101,7 @@ public abstract class StoredProcedure<H extends StoredProcedureParamHelper> {
 			writeTotalRecordSize += subWriteSet.getKeyEntryMapSize();
 		}
 		VanillaDb.featureMap().setWriteRecordSize(writeTotalRecordSize, (int)tx.getTransactionNumber());
-		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)tx.getTransactionNumber());
+		VanillaDb.featureMap().setStartTime(startTime, (int)tx.getTransactionNumber());
 		VanillaDb.featureMap().setTxnType(pid, tx.getTransactionNumber());
 	}
 	

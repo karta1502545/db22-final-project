@@ -131,11 +131,12 @@ public class Transaction {
 		// TODO: record latency and start time in LatencyGroundTruth.csv
 
 		// DONE: Record activeTxnCount in FeatureMap
-		this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
-		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
+		// this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
+		VanillaDb.featureMap().setActiveTxCount(this.activeTxCount, txNum);	
 		VanillaDb.featureMap().setTxNum((int)txNum);
 		this.startTime = VanillaDb.featureMap().getFeatureMap().get((int)txNum).startTime;
 		VanillaDb.featureMap().setLatency(TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startTime), (int)txNum);
+		VanillaDb.featureMap().setStartTime(TimeUnit.NANOSECONDS.toSeconds(startTime), (int)txNum);
 	}
 
 	/**

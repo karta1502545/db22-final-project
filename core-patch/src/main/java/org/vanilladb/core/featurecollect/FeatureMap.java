@@ -94,9 +94,12 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff = new StringBuilder();
-        buff.append("Transaction ID, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
+        buff.append("Transaction ID, Start Time, readCount, writeCount, txnType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
+            if (txFeature.txnType == 1003){
+                continue;
+            }
             buff.append(txFeature.txNum).append(", ")
                 .append(txFeature.startTime).append(", ")
                 .append(txFeature.readCount).append(", ")
@@ -123,6 +126,9 @@ public class FeatureMap {
         buff1.append("Transaction ID, Latency").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
+            if (txFeature.txnType == 1003){
+                continue;
+            }
             buff1.append(txFeature.txNum).append(", ")
                 .append(txFeature.latency)
                 .append(LINE_SEPARATOR);
@@ -137,9 +143,12 @@ public class FeatureMap {
             e.printStackTrace();
         }
         StringBuilder buff2 = new StringBuilder();
-        buff2.append("Transaction ID, Latency, Start Time, readCount, writeCount, queryType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
+        buff2.append("Transaction ID, Latency, Start Time, readCount, writeCount, txnType, concurrentlyExecutingTxNum, readRecordSize, writeRecordSize, numberOfQueuingTx, memoryUsage, cpuUsage").append(LINE_SEPARATOR);
         // System.out.println(featureMap.values());
         for (FeatureCollection txFeature : featureMap.values()) {
+            if (txFeature.txnType == 1003){
+                continue;
+            }
             buff2.append(txFeature.txNum).append(", ")
                 .append(txFeature.latency).append(", ")
                 .append(txFeature.startTime).append(", ")
