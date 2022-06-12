@@ -3,7 +3,7 @@ package org.vanilladb.core.featurecollect;
 public class FeatureCollection{
 	int txNum;
 	long latency;
-	long startTime;
+	public long startTime;
 	int readCount;
 	int writeCount;
 	int txnType;

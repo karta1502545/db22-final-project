@@ -134,6 +134,7 @@ public class Transaction {
 		this.activeTxCount = (this.activeTxCount + txMgr.getActiveTxCount()) / 2;
 		VanillaDb.featureMap().setActiveTxCount(activeTxCount, txNum);
 		VanillaDb.featureMap().setTxNum((int)txNum);
+		this.startTime = VanillaDb.featureMap().getFeatureMap().get((int)txNum).startTime;
 		VanillaDb.featureMap().setLatency(TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - startTime), (int)txNum);
 	}
 
